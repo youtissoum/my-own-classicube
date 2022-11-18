@@ -648,7 +648,7 @@ void MFAScreen_SetActive(void) {
 *#########################################################################################################################*/
 static struct MainScreen {
 	LScreen_Layout
-	struct LButton btnLogin, btnResume, btnDirect, btnSPlayer, btnRegister, btnOptions, btnUpdates;
+	struct LButton btnLogin, btnResume, btnFavorites, btnDirect, btnSPlayer, btnRegister, btnOptions, btnUpdates;
 	struct LInput iptUsername, iptPassword;
 	struct LLabel lblStatus, lblUpdate;
 	cc_bool signingIn;
@@ -657,10 +657,10 @@ static struct MainScreen {
 static struct LWidget* main_widgets[] = {
 	(struct LWidget*)&MainScreen.iptUsername, (struct LWidget*)&MainScreen.iptPassword,
 	(struct LWidget*)&MainScreen.btnLogin,    (struct LWidget*)&MainScreen.btnResume,
-	(struct LWidget*)&MainScreen.lblStatus,   (struct LWidget*)&MainScreen.btnDirect,
-	(struct LWidget*)&MainScreen.btnSPlayer,  (struct LWidget*)&MainScreen.lblUpdate,
-	(struct LWidget*)&MainScreen.btnRegister, (struct LWidget*)&MainScreen.btnOptions,
-	(struct LWidget*)&MainScreen.btnUpdates
+	(struct LWidget*)&MainScreen.lblStatus,   (struct LWidget*)&MainScreen.btnFavorites, 
+	(struct LWidget*)&MainScreen.btnDirect,   (struct LWidget*)&MainScreen.btnSPlayer,  
+	(struct LWidget*)&MainScreen.lblUpdate,   (struct LWidget*)&MainScreen.btnRegister, 
+	(struct LWidget*)&MainScreen.btnOptions,  (struct LWidget*)&MainScreen.btnUpdates
 };
 
 LAYOUTS main_iptUsername[] = { { ANCHOR_CENTRE_MIN, -140 }, { ANCHOR_CENTRE, -120 } };
@@ -669,9 +669,10 @@ LAYOUTS main_iptPassword[] = { { ANCHOR_CENTRE_MIN, -140 }, { ANCHOR_CENTRE,  -7
 LAYOUTS main_btnLogin[]  = { { ANCHOR_CENTRE, -90 }, { ANCHOR_CENTRE, -25 } };
 LAYOUTS main_lblStatus[] = { { ANCHOR_CENTRE,   0 }, { ANCHOR_CENTRE,  20 } };
 
-LAYOUTS main_btnResume[]  = { { ANCHOR_CENTRE, 90 }, { ANCHOR_CENTRE, -25 } };
-LAYOUTS main_btnDirect[]  = { { ANCHOR_CENTRE,  0 }, { ANCHOR_CENTRE,  60 } };
-LAYOUTS main_btnSPlayer[] = { { ANCHOR_CENTRE,  0 }, { ANCHOR_CENTRE, 110 } };
+LAYOUTS main_btnResume[]    = { { ANCHOR_CENTRE, 90 }, { ANCHOR_CENTRE, -25 } };
+LAYOUTS main_btnFavorites[] = { { ANCHOR_CENTRE,  0 }, { ANCHOR_CENTRE,  50 } };
+LAYOUTS main_btnDirect[]    = { { ANCHOR_CENTRE,  0 }, { ANCHOR_CENTRE,  90 } };
+LAYOUTS main_btnSPlayer[]   = { { ANCHOR_CENTRE,  0 }, { ANCHOR_CENTRE, 130 } };
 
 LAYOUTS main_lblUpdate[]   = { { ANCHOR_MAX,   10 }, { ANCHOR_MAX, 45 } };
 LAYOUTS main_btnRegister[] = { { ANCHOR_MIN,    6 }, { ANCHOR_MAX,  6 } };
@@ -802,8 +803,9 @@ static void MainScreen_Init(struct LScreen* s_) {
 	LButton_Init(&s->btnResume,   100, 35, "Resume",  main_btnResume);
 
 	LLabel_Init( &s->lblStatus,  "",                        main_lblStatus);
-	LButton_Init(&s->btnDirect,  200, 35, "Direct connect", main_btnDirect);
-	LButton_Init(&s->btnSPlayer, 200, 35, "Singleplayer",   main_btnSPlayer);
+	LButton_Init(&s->btnFavorites, 200, 35, "Favorite Servers", main_btnFavorites);
+	LButton_Init(&s->btnDirect,    200, 35, "Direct connect",   main_btnDirect);
+	LButton_Init(&s->btnSPlayer,   200, 35, "Singleplayer",     main_btnSPlayer);
 
 	LLabel_Init( &s->lblUpdate,   "&eChecking..",      main_lblUpdate);
 	LButton_Init(&s->btnRegister, 100, 35, "Register", main_btnRegister);
