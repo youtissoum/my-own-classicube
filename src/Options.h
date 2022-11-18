@@ -89,6 +89,8 @@ Copyright 2014-2022 ClassiCube | Licensed under BSD-3
 #define ROPT_PORT   "launcher-port"
 #define ROPT_MPPASS "launcher-mppass"
 
+#define LOPT_FAVORITES "launcher-favorites"
+
 #define SOPT_SERVICES "server-services"
 
 struct StringsBuffer;
@@ -137,4 +139,7 @@ void Options_SetSecure(const char* opt, const cc_string* data);
 /* Attempts to securely decode an option. */
 /* NOTE: Not all platforms support secure saving. */
 void Options_GetSecure(const char* opt, cc_string* data);
+
+/* gets a value in base64 format */
+void Options_Getb64(const char* key, cc_string* value);
 #endif

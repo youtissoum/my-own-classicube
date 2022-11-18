@@ -202,3 +202,21 @@ void Options_GetSecure(const char* opt, cc_string* dst) {
 	res = Platform_Decrypt(data, dataLen, dst);
 	if (res) Platform_Log2("Error %h decrypting option %c", &res, opt);
 }
+
+// this very likely needs some cleanup or something
+void Options_Getb64(const char* opt, cc_string* dst) {
+	cc_uint8 unbased[1500];
+	int dataLen;
+	cc_string raw;
+
+	Options_UNSAFE_Get(opt, &raw);
+	if (!raw.length) return;
+	if (raw.length > 2000) Logger_Abort("too large to base64");
+
+	dataLen = Convert_FromBase64(raw.buffer, raw.length, &unbased);
+
+	int strLen = String_Length(&unbased);
+	dst->capacity = dataLen;
+	dst->length = dataLen;
+	dst->buffer = &unbased;
+}
