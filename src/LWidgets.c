@@ -14,6 +14,8 @@
 #include "Utils.h"
 #include "LBackend.h"
 
+#include "Logger.h"
+
 static int flagXOffset, flagYOffset;
 static int oneX, twoX, fourX;
 static int oneY, twoY, fourY;
@@ -455,6 +457,14 @@ static void FlagColumn_Draw(struct ServerInfo* row, struct DrawTextArgs* args, s
 	Context2D_DrawPixels(ctx, cell->x + flagXOffset, cell->y + flagYOffset, &flag->bmp);
 }
 
+static void FavoriteColumn_Draw(struct ServerInfo* row, struct DrawTextArgs* args, struct LTableCell* cell, struct Context2D* ctx) {
+	// TODO: draw a star icon or smth
+	struct Flag* flag = Flags_Get(row);
+	if (!flag) return;
+	if (row->is_favorited)
+		Context2D_DrawPixels(ctx, cell->x + flagXOffset, cell->y + flagYOffset, &flag->bmp);
+}
+
 static void NameColumn_Draw(struct ServerInfo* row, struct DrawTextArgs* args, struct LTableCell* cell, struct Context2D* ctx) {
 	args->text = row->name;
 }
@@ -488,6 +498,7 @@ static int SoftwareColumn_Sort(const struct ServerInfo* a, const struct ServerIn
 
 static struct LTableColumn tableColumns[] = {
 	{ "",          15, FlagColumn_Draw,     NULL,                false, false },
+	{ "",          15, FavoriteColumn_Draw, NULL,                false, false },
 	{ "Name",     328, NameColumn_Draw,     NameColumn_Sort,     true,  true  },
 	{ "Players",   73, PlayersColumn_Draw,  PlayersColumn_Sort,  true,  true  },
 	{ "Uptime",    73, UptimeColumn_Draw,   UptimeColumn_Sort,   true,  true  },

@@ -400,6 +400,15 @@ static void ServerInfo_Parse(struct JsonContext* ctx, const cc_string* val) {
 		info->country[0] = val->buffer[0]; Char_MakeLower(info->country[0]);
 		info->country[1] = val->buffer[1]; Char_MakeLower(info->country[1]);
 	}
+
+	// Is favorited
+	cc_string favorites;
+	Options_Getb64(LOPT_FAVORITES, &favorites);
+
+	cc_string a = String_Init("a", 1, 4);
+
+	if (String_Compare(&favorites, &info->hash) == 0) info->is_favorited = true;
+	else info->is_favorited = false;
 }
 
 static void FetchServerTask_Handle(cc_uint8* data, cc_uint32 len) {

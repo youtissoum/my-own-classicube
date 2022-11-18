@@ -40,6 +40,7 @@ struct ServerInfo {
 	char _hashBuffer[32],   _nameBuffer[STRING_SIZE];
 	char _ipBuffer[16],     _mppassBuffer[STRING_SIZE];
 	char _softBuffer[STRING_SIZE];
+	cc_bool is_favorited;
 };
 
 /* Represents a country flag */
