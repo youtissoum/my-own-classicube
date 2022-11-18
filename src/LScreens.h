@@ -46,4 +46,5 @@ void ServersScreen_SetActive(void);
 void SettingsScreen_SetActive(void);
 void ThemesScreen_SetActive(void);
 void UpdatesScreen_SetActive(void);
+void FavoritesScreen_SetActive(void);
 #endif

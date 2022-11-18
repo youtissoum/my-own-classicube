@@ -405,10 +405,23 @@ static void ServerInfo_Parse(struct JsonContext* ctx, const cc_string* val) {
 	cc_string favorites;
 	Options_Getb64(LOPT_FAVORITES, &favorites);
 
-	cc_string a = String_Init("a", 1, 4);
+	// TODO: have a maximum favorites thing somewhere
+	cc_string favorites_list[10];
 
-	if (String_Compare(&favorites, &info->hash) == 0) info->is_favorited = true;
-	else info->is_favorited = false;
+	String_UNSAFE_Split(&favorites, ' ', &favorites_list, 10);
+
+	cc_bool yes = false;
+
+	for (int i = 0; i < 9; i++)
+	{
+		if (String_Compare(&favorites_list[i], &info->hash) == 0) {
+			info->is_favorited = true;
+			yes = true;
+			break;
+		}
+	}
+
+	if (!yes) info->is_favorited = false;
 }
 
 static void FetchServerTask_Handle(cc_uint8* data, cc_uint32 len) {

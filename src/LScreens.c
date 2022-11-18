@@ -145,6 +145,7 @@ static void SwitchToMain(void* w)          { MainScreen_SetActive(); }
 static void SwitchToSettings(void* w)      { SettingsScreen_SetActive(); }
 static void SwitchToThemes(void* w)        { ThemesScreen_SetActive(); }
 static void SwitchToUpdates(void* w)       { UpdatesScreen_SetActive(); }
+static void SwitchToFavorites(void* w)     { FavoritesScreen_SetActive(); }
 
 
 /*########################################################################################################################*
@@ -812,13 +813,14 @@ static void MainScreen_Init(struct LScreen* s_) {
 	LButton_Init(&s->btnOptions,  100, 35, "Options",  main_btnOptions);
 	LButton_Init(&s->btnUpdates,  100, 35, "Updates",  main_btnUpdates);
 	
-	s->btnLogin.OnClick    = MainScreen_Login;
-	s->btnResume.OnClick   = MainScreen_Resume;
-	s->btnDirect.OnClick   = SwitchToDirectConnect;
-	s->btnSPlayer.OnClick  = MainScreen_Singleplayer;
-	s->btnRegister.OnClick = MainScreen_Register;
-	s->btnOptions.OnClick  = SwitchToSettings;
-	s->btnUpdates.OnClick  = SwitchToUpdates;
+	s->btnLogin.OnClick     = MainScreen_Login;
+	s->btnResume.OnClick    = MainScreen_Resume;
+	s->btnFavorites.OnClick = SwitchToFavorites;
+	s->btnDirect.OnClick    = SwitchToDirectConnect;
+	s->btnSPlayer.OnClick   = MainScreen_Singleplayer;
+	s->btnRegister.OnClick  = MainScreen_Register;
+	s->btnOptions.OnClick   = SwitchToSettings;
+	s->btnUpdates.OnClick   = SwitchToUpdates;
 
 	s->btnResume.OnHover   = MainScreen_ResumeHover;
 	s->btnResume.OnUnhover = MainScreen_ResumeUnhover;
@@ -1326,10 +1328,55 @@ void ServersScreen_SetActive(void) {
 	Launcher_SetScreen((struct LScreen*)s);
 }
 
+/*########################################################################################################################*
+*-------------------------------------------------------FavoritesScreen---------------------------------------------------*
+*#########################################################################################################################*/
+
+static struct FavoritesScreen {
+	LScreen_Layout
+	struct LButton btnBack;
+} FavoritesScreen;
+
+static struct LWidget* favorites_widgets[] = {
+	(struct LWidget*)&FavoritesScreen.btnBack
+};
+
+LAYOUTS favorites_btnBack[] = { { ANCHOR_CENTRE, 0 }, { ANCHOR_CENTRE, 0 } };
+
+static void FavoritesScreen_Init(struct LScreen* s_) {
+	struct FavoritesScreen* s = (struct FavoritesScreen*)s_;
+	s->widgets = favorites_widgets;
+	s->numWidgets = Array_Elems(favorites_widgets);
+
+	LButton_Init(&s->btnBack, 100, 35, "Back", favorites_btnBack);
+
+	s->btnBack.OnClick = SwitchToMain;
+}
+
+static void FavoritesScreen_Free(struct LScreen* s_) {
+	struct FavoritesScreen* s = (struct FavoritesScreen*)s_;
+}
+
+static void FavoritesScreen_Tick(struct LScreen* s_) {
+	struct FavoritesScreen* s = (struct FavoritesScreen*)s_;
+	LScreen_Tick(s_);
+}
+
+void FavoritesScreen_SetActive(void) {
+	struct FavoritesScreen* s = &FavoritesScreen;
+	LScreen_Reset((struct LScreen*)s);
+	s->Init = FavoritesScreen_Init;
+	s->Free = FavoritesScreen_Free;
+	s->Tick = FavoritesScreen_Tick; \
+
+		s->title = "Favorite Servers";
+	Launcher_SetScreen((struct LScreen*)s);
+}
 
 /*########################################################################################################################*
 *--------------------------------------------------------SettingsScreen---------------------------------------------------*
 *#########################################################################################################################*/
+
 static struct SettingsScreen {
 	LScreen_Layout
 	struct LButton btnMode, btnColours, btnBack;
