@@ -171,7 +171,7 @@ void Options_SetString(const cc_string* key, const cc_string* value) {
 }
 
 void Options_SetSecure(const char* opt, const cc_string* src) {
-	char data[2000], encData[1500+1];
+	char data[2000], encData[1500 + 1];
 	cc_string tmp, enc;
 	cc_result res;
 	if (!src->length) return;
@@ -182,8 +182,8 @@ void Options_SetSecure(const char* opt, const cc_string* src) {
 
 	/* base64 encode the data, as user might edit options.txt with a text editor */
 	if (enc.length > 1500) Logger_Abort("too large to base64");
-	tmp.buffer   = data;
-	tmp.length   = Convert_ToBase64(enc.buffer, enc.length, data);
+	tmp.buffer = data;
+	tmp.length = Convert_ToBase64(enc.buffer, enc.length, data);
 	tmp.capacity = tmp.length;
 	Options_Set(opt, &tmp);
 }
@@ -203,20 +203,27 @@ void Options_GetSecure(const char* opt, cc_string* dst) {
 	if (res) Platform_Log2("Error %h decrypting option %c", &res, opt);
 }
 
-// this very likely needs some cleanup or something
+void Options_Setb64(const char* key, const cc_string* value) {
+	char data[2000];
+	cc_string tmp;
+
+	if (value->length > 2000) Logger_Abort("too large to base64");
+
+	tmp.buffer = data;
+	tmp.length = Convert_ToBase64(value->buffer, value->length, data);
+	tmp.capacity = tmp.length;
+	Options_Set(key, &tmp);
+}
+
 void Options_Getb64(const char* opt, cc_string* dst) {
-	cc_uint8 unbased[1500];
-	int dataLen;
+	char data[2000];
 	cc_string raw;
 
 	Options_UNSAFE_Get(opt, &raw);
 	if (!raw.length) return;
 	if (raw.length > 2000) Logger_Abort("too large to base64");
 
-	dataLen = Convert_FromBase64(raw.buffer, raw.length, &unbased);
-
-	int strLen = String_Length(&unbased);
-	dst->capacity = dataLen;
-	dst->length = dataLen;
-	dst->buffer = &unbased;
+	dst->buffer = data;
+	dst->length = Convert_FromBase64(raw.buffer, raw.length, data);
+	dst->capacity = dst->length;
 }

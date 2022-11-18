@@ -140,6 +140,8 @@ void Options_SetSecure(const char* opt, const cc_string* data);
 /* NOTE: Not all platforms support secure saving. */
 void Options_GetSecure(const char* opt, cc_string* data);
 
+/* sets a value in base64 format */
+void Options_Setb64(const char* key, const cc_string* value);
 /* gets a value in base64 format */
 void Options_Getb64(const char* key, cc_string* value);
 #endif
